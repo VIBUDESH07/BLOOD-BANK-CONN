@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hospital-backend
+    ports:
+      - "5000:5000"  # Exposing the backend on port 5000
+    depends_on:
+      - db  # Ensuring MySQL is running before the backend
+    environment:
+      DB_HOST: db  # Use 'db' as the host since both containers are in the same network
+      DB_USER: root
+      DB_PASSWORD: 1234
+      DB_NAME: hackbuzz
+    networks:
+      - hospital-network
+
+  db:
+    image: mysql:latest
+    container_name: some-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: hackbuzz
+    volumes:
+      - ./data/mysql:/var/lib/mysql  # Persist MySQL data
+    ports:
+      - "3307:3306"  # Exposing MySQL on port 3306
+    networks:
+      - hospital-network
+
+networks:
+  hospital-network:
+    driver: bridge

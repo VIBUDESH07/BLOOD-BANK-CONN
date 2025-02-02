@@ -1,1 +1,1 @@
-THIS IS A GLOBAL PROJECT
+Hospital Connection Systems
